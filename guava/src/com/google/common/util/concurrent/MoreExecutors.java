@@ -389,21 +389,6 @@ public final class MoreExecutors {
     return DirectExecutor.INSTANCE;
   }
 
-  /** See {@link #directExecutor} for behavioral notes. */
-  private enum DirectExecutor implements Executor {
-    INSTANCE;
-
-    @Override
-    public void execute(Runnable command) {
-      command.run();
-    }
-
-    @Override
-    public String toString() {
-      return "MoreExecutors.directExecutor()";
-    }
-  }
-
   /**
    * Returns an {@link Executor} that runs each task executed sequentially, such that no two tasks
    * are running concurrently. Submitted tasks have a happens-before order as defined in the Java
@@ -616,8 +601,8 @@ public final class MoreExecutors {
     }
 
     @GwtIncompatible // TODO
-    private static final class NeverSuccessfulListenableFutureTask extends AbstractFuture<Void>
-        implements Runnable {
+    private static final class NeverSuccessfulListenableFutureTask
+        extends AbstractFuture.TrustedFuture<Void> implements Runnable {
       private final Runnable delegate;
 
       public NeverSuccessfulListenableFutureTask(Runnable delegate) {
